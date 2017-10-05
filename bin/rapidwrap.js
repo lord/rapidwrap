@@ -7,4 +7,4 @@ if (process.argv.length < 3) {
 }
 let font = opentype.loadSync(process.argv[2]);
 // console.log(font.getAdvanceWidth("foobar", 14, {}))
-console.log(font.glyphs)
+console.log(font.getGposKerningValue)
