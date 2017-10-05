@@ -1,15 +1,15 @@
-// The Font object
-
-import { DefaultEncoding } from './encoding'
 import glyphset from './glyphset'
 
 // TO SAVE FROM FONT
 
 // this.unitsPerEm
 // this.glyphs
-// this.encoding // TODO I think we can compile this away
+    // index
+    // unicode
+    // advancedWidth
 // this.getGposKerningValue
 // this.kerningPairs
+
 
 function Font (options) {
   options = options || {}
@@ -20,11 +20,22 @@ function Font (options) {
 
   this.unitsPerEm = 1000
   this.glyphs = new glyphset.GlyphSet(this, options.glyphs || [])
-  this.encoding = new DefaultEncoding(this)
 }
 
-Font.prototype.charToGlyphIndex = function (s) {
-  return this.encoding.charToGlyphIndex(s)
+Font.prototype.charToGlyphIndex = function(c) {
+    const code = c.charCodeAt(0);
+    const glyphs = this.glyphs;
+    if (glyphs) {
+        for (let i = 0; i < glyphs.length; i += 1) {
+            const glyph = glyphs.get(i);
+            for (let j = 0; j < glyph.unicodes.length; j += 1) {
+                if (glyph.unicodes[j] === code) {
+                    return i;
+                }
+            }
+        }
+    }
+    return null;
 }
 
 Font.prototype.stringToGlyphs = function (s, options) {
