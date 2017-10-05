@@ -1,0 +1,22 @@
+{
+  "name": "rapidwrap",
+  "version": "1.0.0",
+  "description": "Wrap text, fast",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lord/rapidwrap.git"
+  },
+  "author": "Robert Lord <hello@lord.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lord/rapidwrap/issues"
+  },
+  "homepage": "https://github.com/lord/rapidwrap#readme",
+  "dependencies": {
+    "opentype.js": "^0.7.3"
+  }
+}
