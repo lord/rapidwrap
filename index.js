@@ -1,12 +1,12 @@
 function Font (fontJson) {
   this.unitsPerEm = fontJson.unitsPerEm
-  this.glyphs = {}
+  this.glyphs = []
   for (let i = 0; i < fontJson.glyphData.length; i++) {
     let glyph = fontJson.glyphData[i]
     this.glyphs[i] = {
       index: i,
-      advanceWidth: glyph[1],
-      unicodes: glyph.slice(2)
+      advanceWidth: glyph[0],
+      unicodes: glyph.slice(1)
     }
   }
   this.getGposKerningValue = null // TODO LOAD PROPERLY
@@ -18,7 +18,7 @@ Font.prototype.charToGlyphIndex = function (c) {
   const glyphs = this.glyphs
   if (glyphs) {
     for (let i = 0; i < glyphs.length; i += 1) {
-      const glyph = glyphs.get(i)
+      const glyph = glyphs[i]
       for (let j = 0; j < glyph.unicodes.length; j += 1) {
         if (glyph.unicodes[j] === code) {
           return i
@@ -31,7 +31,7 @@ Font.prototype.charToGlyphIndex = function (c) {
 
 Font.prototype.stringToGlyphs = function (s, options) {
   options = options || this.defaultRenderOptions
-    // Get glyph indexes
+  // Get glyph indexes
   const indexes = []
   for (let i = 0; i < s.length; i += 1) {
     const c = s[i]
@@ -41,9 +41,9 @@ Font.prototype.stringToGlyphs = function (s, options) {
 
   // convert glyph indexes to glyph objects
   const glyphs = new Array(length)
-  const notdef = this.glyphs.get(0)
+  const notdef = this.glyphs[0]
   for (let i = 0; i < length; i += 1) {
-    glyphs[i] = this.glyphs.get(indexes[i]) || notdef
+    glyphs[i] = this.glyphs[indexes[i]] || notdef
   }
   return glyphs
 }
@@ -96,4 +96,4 @@ Font.prototype.getAdvanceWidth = function (text, fontSize, options) {
   return this.forEachGlyph(text, 0, 0, fontSize, options, function () {})
 }
 
-export default Font
+module.exports = Font
