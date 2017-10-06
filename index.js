@@ -38,31 +38,29 @@ Font.prototype.defaultRenderOptions = {
   kerning: true
 }
 
-Font.prototype._forEachGlyph = function (text, fontSize, options, callback) {
+Font.prototype._advance = function (fontScale, glyphs, i, options) {
+  const glyph = glyphs[i]
+  let x = 0
+  if (glyph.advanceWidth) {
+    x += glyph.advanceWidth * fontScale
+  }
+  if (options.kerning && i < glyphs.length - 1) {
+    const kerningValue = this._getKerningValue(glyph, glyphs[i + 1])
+    x += kerningValue * fontScale
+  }
+  return x
+}
+
+Font.prototype.measureText = function (text, fontSize, options) {
   x = 0
   fontSize = fontSize !== undefined ? fontSize : 72
   options = options || this.defaultRenderOptions
   const fontScale = 1 / this.unitsPerEm * fontSize
   const glyphs = this._stringToGlyphs(text)
   for (let i = 0; i < glyphs.length; i += 1) {
-    const glyph = glyphs[i]
-    if (!callback.call(this, glyph, x)) {
-      return
-    }
-    if (glyph.advanceWidth) {
-      x += glyph.advanceWidth * fontScale
-    }
-
-    if (options.kerning && i < glyphs.length - 1) {
-      const kerningValue = this._getKerningValue(glyph, glyphs[i + 1])
-      x += kerningValue * fontScale
-    }
+    x += this._advance(fontScale, glyphs, i, options)
   }
   return x
-}
-
-Font.prototype.measureText = function (text, fontSize, options) {
-  return this._forEachGlyph(text, fontSize, options, function (g, x) {return true})
 }
 
 module.exports = Font
