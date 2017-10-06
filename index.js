@@ -17,11 +17,7 @@ function Font (fontJson) {
   this.kerningPairs = fontJson.kerningPairs
 }
 
-Font.prototype.charToGlyphIndex = function (c) {
-  return this.unicodeMap[code] || null
-}
-
-Font.prototype.stringToGlyphs = function (s) {
+Font.prototype._stringToGlyphs = function (s) {
   const glyphs = new Array(s.length)
   for (let i = 0; i < s.length; i += 1) {
     const code = s[i].charCodeAt(0)
@@ -30,7 +26,7 @@ Font.prototype.stringToGlyphs = function (s) {
   return glyphs
 }
 
-Font.prototype.getKerningValue = function (leftGlyph, rightGlyph) {
+Font.prototype._getKerningValue = function (leftGlyph, rightGlyph) {
   leftGlyph = leftGlyph.index || leftGlyph
   rightGlyph = rightGlyph.index || rightGlyph
   const gposKerning = this.getGposKerningValue
@@ -42,12 +38,12 @@ Font.prototype.defaultRenderOptions = {
   kerning: true
 }
 
-Font.prototype.forEachGlyph = function (text, fontSize, options, callback) {
+Font.prototype._forEachGlyph = function (text, fontSize, options, callback) {
   x = 0
   fontSize = fontSize !== undefined ? fontSize : 72
   options = options || this.defaultRenderOptions
   const fontScale = 1 / this.unitsPerEm * fontSize
-  const glyphs = this.stringToGlyphs(text)
+  const glyphs = this._stringToGlyphs(text)
   for (let i = 0; i < glyphs.length; i += 1) {
     const glyph = glyphs[i]
     if (!callback.call(this, glyph, x)) {
@@ -58,15 +54,15 @@ Font.prototype.forEachGlyph = function (text, fontSize, options, callback) {
     }
 
     if (options.kerning && i < glyphs.length - 1) {
-      const kerningValue = this.getKerningValue(glyph, glyphs[i + 1])
+      const kerningValue = this._getKerningValue(glyph, glyphs[i + 1])
       x += kerningValue * fontScale
     }
   }
   return x
 }
 
-Font.prototype.getAdvanceWidth = function (text, fontSize, options) {
-  return this.forEachGlyph(text, fontSize, options, function (g, x) {return true})
+Font.prototype.measureText = function (text, fontSize, options) {
+  return this._forEachGlyph(text, fontSize, options, function (g, x) {return true})
 }
 
 module.exports = Font
