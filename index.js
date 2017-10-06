@@ -5,21 +5,32 @@ import glyphset from './glyphset'
 // this.unitsPerEm
 // this.glyphs
     // index
-    // unicode
-    // advancedWidth
-// this.getGposKerningValue
+    // unicodes
+    // advanceWidth
+// this.getGposKerningValue <- function
 // this.kerningPairs
+        // table.getKerningValue = function(leftGlyph, rightGlyph) {
+        //     for (let i = subtables.length; i--;) {
+        //         const value = subtables[i](leftGlyph, rightGlyph);
+        //         if (value !== undefined) return value;
+        //     }
+
+        //     return 0;
+        // };
 
 
-function Font (options) {
-  options = options || {}
-
-  if (!options.empty) {
-    this.unitsPerEm = options.unitsPerEm || 1000
-  }
-
-  this.unitsPerEm = 1000
-  this.glyphs = new glyphset.GlyphSet(this, options.glyphs || [])
+function Font (fontJson) {
+  this.unitsPerEm = fontJson.unitsPerEm
+  this.glyphs = {}
+  fontJson.glyphData.forEach((glyph) => {
+    this.glyphs[glyph.index] = {
+      index: glyph[0],
+      advanceWidth: glyph[1],
+      unicodes: glyph.slice(2),
+    }
+  })
+  this.getGposKerningValue = null // TODO LOAD PROPERLY
+  this.kerningPairs = fontJson.kerningPairs
 }
 
 Font.prototype.charToGlyphIndex = function(c) {
