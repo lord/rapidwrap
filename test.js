@@ -12,4 +12,7 @@ if (w < 17.42 || w > 17.43) {
   console.log('Incorrect size detected: expected ~17.42, got ', w)
   process.exit(1)
 }
+console.log(
+  f.wrapText("meown utesaotuhes oanthunes thaunsth uetnoh untehnatuhensothunsethoaunsetohunstheoas ntuhens hnsth ansth nst hont ehnot hantu heonta hunte hoasu hensoat hunetsoahunstehoasnutheonsatuhnseotahunstehoansutheoansuthensotauhenstoahunseothansuthnst", 16, 400)
+)
 

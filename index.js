@@ -52,15 +52,65 @@ Font.prototype._advance = function (fontScale, glyphs, i, options) {
 }
 
 Font.prototype.measureText = function (text, fontSize, options) {
-  x = 0
+  let x = 0
   fontSize = fontSize !== undefined ? fontSize : 72
   options = options || this.defaultRenderOptions
   const fontScale = 1 / this.unitsPerEm * fontSize
   const glyphs = this._stringToGlyphs(text)
+
   for (let i = 0; i < glyphs.length; i += 1) {
     x += this._advance(fontScale, glyphs, i, options)
   }
   return x
+}
+
+Font.prototype.wrapText = function (text, fontSize, width, options) {
+  fontSize = fontSize !== undefined ? fontSize : 72
+  options = options || this.defaultRenderOptions
+  const fontScale = 1 / this.unitsPerEm * fontSize
+  const glyphs = this._stringToGlyphs(text)
+
+  let lines = []
+  let x = 0
+  let wordX = 0
+  let line = ""
+  let word = ""
+  for (let i = 0; i < glyphs.length; i += 1) {
+    let delta = this._advance(fontScale, glyphs, i, options)
+    if (text[i] === " ") {
+      // MOVE WORD TO LINE
+      console.log(`word to line: ${word}`)
+      line += word + text[i]
+      word = ""
+      wordX = x + delta
+    } else {
+      if (delta + x > width) {
+        // TOO LONG!
+        if (line.length > 0) {
+          x = Math.max(x-wordX,0)
+          wordX = 0
+          console.log('line done: ', line, x)
+          lines.push(line)
+          line = ""
+        } else {
+          // TOO LONG, and we haven't finished a word yet so we have to hard start a new one
+          x = 0
+          wordX = 0
+          console.log('word too long: ', word)
+          lines.push(word)
+          word = ""
+        }
+      }
+      word += text[i]
+      x += delta
+    }
+
+  }
+  line += word
+  if (line.length > 0) {
+    lines.push(line)
+  }
+  return lines
 }
 
 module.exports = Font
