@@ -6,14 +6,21 @@ if (process.argv.length < 3) {
   process.exit(0)
 }
 let font = opentype.loadSync(process.argv[2]);
-// console.log(font.getAdvanceWidth("foobar", 14, {}))
-let glyphs = []
+let maxIdx = -1
 for (let idx in font.glyphs.glyphs) {
-  let glyph = font.glyphs.glyphs[idx]
-  if (typeof glyph === 'function') {
-      glyph = glyph();
+  maxIdx = Math.max(maxIdx, idx)
+}
+let glyphs = []
+for (let i = 0; i < maxIdx; i++) {
+  let glyph = font.glyphs.glyphs[i]
+  if (glyph) {
+    if (typeof glyph === 'function') {
+        glyph = glyph();
+    }
+    glyphs.push([glyph.advanceWidth].concat(glyph.unicodes))
+  } else {
+    glyphs.push([0])
   }
-  glyphs.push([glyph.index, glyph.advanceWidth].concat(glyph.unicodes))
 }
 let output = {
   unitsPerEm: font.unitsPerEm,

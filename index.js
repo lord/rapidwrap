@@ -22,13 +22,14 @@ import glyphset from './glyphset'
 function Font (fontJson) {
   this.unitsPerEm = fontJson.unitsPerEm
   this.glyphs = {}
-  fontJson.glyphData.forEach((glyph) => {
-    this.glyphs[glyph.index] = {
-      index: glyph[0],
+  for (let i = 0; i < fontJson.glyphData.length; i++) {
+    let glyph = fontJson.glyphData[i]
+    this.glyphs[i] = {
+      index: i,
       advanceWidth: glyph[1],
       unicodes: glyph.slice(2),
     }
-  })
+  }
   this.getGposKerningValue = null // TODO LOAD PROPERLY
   this.kerningPairs = fontJson.kerningPairs
 }
