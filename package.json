@@ -4,7 +4,7 @@
   "description": "Wrap text, fast",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./bin/rapidwrap.js ./fonts/Roboto-Black.ttf > testout.js && node test.js"
   },
   "repository": {
     "type": "git",
