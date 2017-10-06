@@ -1,24 +1,3 @@
-import glyphset from './glyphset'
-
-// TO SAVE FROM FONT
-
-// this.unitsPerEm
-// this.glyphs
-    // index
-    // unicodes
-    // advanceWidth
-// this.getGposKerningValue <- function
-// this.kerningPairs
-        // table.getKerningValue = function(leftGlyph, rightGlyph) {
-        //     for (let i = subtables.length; i--;) {
-        //         const value = subtables[i](leftGlyph, rightGlyph);
-        //         if (value !== undefined) return value;
-        //     }
-
-        //     return 0;
-        // };
-
-
 function Font (fontJson) {
   this.unitsPerEm = fontJson.unitsPerEm
   this.glyphs = {}
@@ -27,27 +6,27 @@ function Font (fontJson) {
     this.glyphs[i] = {
       index: i,
       advanceWidth: glyph[1],
-      unicodes: glyph.slice(2),
+      unicodes: glyph.slice(2)
     }
   }
   this.getGposKerningValue = null // TODO LOAD PROPERLY
   this.kerningPairs = fontJson.kerningPairs
 }
 
-Font.prototype.charToGlyphIndex = function(c) {
-    const code = c.charCodeAt(0);
-    const glyphs = this.glyphs;
-    if (glyphs) {
-        for (let i = 0; i < glyphs.length; i += 1) {
-            const glyph = glyphs.get(i);
-            for (let j = 0; j < glyph.unicodes.length; j += 1) {
-                if (glyph.unicodes[j] === code) {
-                    return i;
-                }
-            }
+Font.prototype.charToGlyphIndex = function (c) {
+  const code = c.charCodeAt(0)
+  const glyphs = this.glyphs
+  if (glyphs) {
+    for (let i = 0; i < glyphs.length; i += 1) {
+      const glyph = glyphs.get(i)
+      for (let j = 0; j < glyph.unicodes.length; j += 1) {
+        if (glyph.unicodes[j] === code) {
+          return i
         }
+      }
     }
-    return null;
+  }
+  return null
 }
 
 Font.prototype.stringToGlyphs = function (s, options) {
