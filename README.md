@@ -24,6 +24,6 @@ let wrapWidth = 300
 myFont.measureText("text", fontSize)
 // -> pixel width of "text"
 
-myFont.measureText("blah blah very long string that will be wrapped here", fontSize, wrapWidth)
+myFont.wrapText("blah blah very long string that will be wrapped here", fontSize, wrapWidth)
 // -> array of wrapped lines as strings
 ```
