@@ -8,22 +8,28 @@ Imagine you have a canvas, and want to draw wrapped text. You can use `canvas.ge
 
 <h2>Usage</h2>
 
-Using the rapidwrap command line tool (`npm install -g rapidwrap`), preprocess your text file with:
+STILL UNDER CONSTRUCTION
+
+Using the rapidwrap command line tool (`npm install -g rapidwrap`), preprocess your font file with:
 
     rapidwrap /path/to/font/file.otf > output.js
-    
-Then, in your file:
+
+Then, in your Javascript (using Webpack if in the browser):
 
 ```js
 const Font = require('rapidwrap')
 const data = require('./output.js')
 let myFont = new Font(data)
 let fontSize = 16
-let wrapWidth = 300
 
 myFont.measureText("text", fontSize)
-// -> pixel width of "text"
+// -> 27.8828125
 
+let wrapWidth = 200
 myFont.wrapText("blah blah very long string that will be wrapped here", fontSize, wrapWidth)
-// -> array of wrapped lines as strings
+// -> ['blah blah very long string that ', 'will be wrapped here']
+
+let x = 22
+myFont.positionAt("some text here", fontSize, x)
+// -> TODO cursor character index at click position x
 ```
