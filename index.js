@@ -21,8 +21,7 @@ Font.prototype.charToGlyphIndex = function (c) {
   return this.unicodeMap[code] || null
 }
 
-Font.prototype.stringToGlyphs = function (s, options) {
-  options = options || this.defaultRenderOptions
+Font.prototype.stringToGlyphs = function (s) {
   const glyphs = new Array(s.length)
   for (let i = 0; i < s.length; i += 1) {
     const code = s[i].charCodeAt(0)
@@ -40,11 +39,7 @@ Font.prototype.getKerningValue = function (leftGlyph, rightGlyph) {
 }
 
 Font.prototype.defaultRenderOptions = {
-  kerning: true,
-  features: {
-    liga: true,
-    rlig: true
-  }
+  kerning: true
 }
 
 Font.prototype.forEachGlyph = function (text, fontSize, options, callback) {
@@ -52,7 +47,7 @@ Font.prototype.forEachGlyph = function (text, fontSize, options, callback) {
   fontSize = fontSize !== undefined ? fontSize : 72
   options = options || this.defaultRenderOptions
   const fontScale = 1 / this.unitsPerEm * fontSize
-  const glyphs = this.stringToGlyphs(text, options)
+  const glyphs = this.stringToGlyphs(text)
   for (let i = 0; i < glyphs.length; i += 1) {
     const glyph = glyphs[i]
     if (!callback.call(this, glyph, x)) {
